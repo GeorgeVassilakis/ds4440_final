@@ -30,6 +30,13 @@
                                        placeholder="Enter a song ID (e.g., 286)" min="1" required>
                             </div>
                             <div class="mb-3">
+                                <label for="model-select" class="form-label">Model Type:</label>
+                                <select class="form-select" id="model-select">
+                                    <option value="ae" selected>Regular Autoencoder</option>
+                                    <option value="vae">Variational Autoencoder (VAE)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="num-recommendations" class="form-label">Number of Recommendations:</label>
                                 <select class="form-select" id="num-recommendations">
                                     <option value="5" selected>5</option>
@@ -59,6 +66,7 @@
                         </div>
                         <div id="results-container" class="d-none">
                             <h3 class="h5 mb-3">Songs similar to ID: <span id="source-song-id"></span></h3>
+                            <p class="text-muted mb-3">Using model: <span id="model-used" class="fw-bold"></span></p>
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead>
@@ -93,9 +101,14 @@
                         <p>This music recommender system uses embeddings generated from audio features to find similar songs. The system was created using the following process:</p>
                         <ol>
                             <li>Extracted audio features from songs using a variety of acoustic measures (MFCC, energy, spectral features, etc.)</li>
-                            <li>Trained an autoencoder neural network to generate 16-dimensional embeddings that capture the essence of each song</li>
+                            <li>Trained two types of neural networks to generate 16-dimensional embeddings:
+                                <ul>
+                                    <li>A regular autoencoder that compresses the audio features</li>
+                                    <li>A variational autoencoder (VAE) that adds probabilistic elements to create smoother embeddings</li>
+                                </ul>
+                            </li>
                             <li>Computed similarity scores between songs based on the cosine similarity of their embeddings</li>
-                            <li>Created this website to make recommendations based on the pre-computed similarity matrix</li>
+                            <li>Created this website to make recommendations based on the pre-computed embeddings</li>
                         </ol>
                         
                         <h3 class="h5 mt-4">Technical Details</h3>

@@ -17,7 +17,10 @@ async function getSimilarSongs(songId, limit = 5) {
         }
         
         // Otherwise, load the embeddings data first
-        const embeddingsResponse = await fetch('song_embeddings.csv');
+        const modelType = window.selectedModel || 'ae'; // Default to regular autoencoder if not specified
+        const embeddingsFile = modelType === 'vae' ? 'VAE_song_embeddings.csv' : 'song_embeddings.csv';
+        
+        const embeddingsResponse = await fetch(embeddingsFile);
         const embeddingsText = await embeddingsResponse.text();
         
         const embeddingsData = parseEmbeddingsCSV(embeddingsText);

@@ -4,6 +4,7 @@
 let songEmbeddings = null;
 let similarityMatrix = null;
 let songIds = null;
+let selectedModel = 'ae'; // 'ae' for regular autoencoder, 'vae' for variational autoencoder
 
 // Initialize application on document load
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,13 +14,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set up form submission handler
     const form = document.getElementById('recommender-form');
     form.addEventListener('submit', handleFormSubmit);
+
+    // Set up model selection handler
+    const modelSelect = document.getElementById('model-select');
+    if (modelSelect) {
+        modelSelect.addEventListener('change', function() {
+            selectedModel = this.value;
+            window.selectedModel = selectedModel;
+            loadEmbeddingsData();
+        });
+    }
 });
 
 // Function to load the embeddings data
 async function loadEmbeddingsData() {
     try {
+        // Determine which files to load based on selected model
+        const embeddingsFile = selectedModel === 'vae' ? 'VAE_song_embeddings.csv' : 'song_embeddings.csv';
+        
         // Load song embeddings CSV
-        const embeddingsResponse = await fetch('song_embeddings.csv');
+        const embeddingsResponse = await fetch(embeddingsFile);
         const embeddingsText = await embeddingsResponse.text();
         
         // Parse the CSV to get song IDs and embeddings
@@ -27,7 +41,7 @@ async function loadEmbeddingsData() {
         songEmbeddings = embeddingsData.embeddings;
         songIds = embeddingsData.songIds;
         
-        console.log(`Loaded embeddings for ${songIds.length} songs`);
+        console.log(`Loaded embeddings for ${songIds.length} songs using ${selectedModel === 'vae' ? 'Variational Autoencoder' : 'Autoencoder'} model`);
         
         // Enable the form
         document.getElementById('song-id').disabled = false;
@@ -86,12 +100,19 @@ async function handleFormSubmit(event) {
     try {
         const recommendations = await getSimilarSongs(songId, numRecommendations);
         displayRecommendations(recommendations);
+        
+        // Also show which model was used
+        const modelName = selectedModel === 'vae' ? 'Variational Autoencoder' : 'Regular Autoencoder';
+        document.getElementById('model-used').textContent = modelName;
     } catch (error) {
         console.error('Error getting recommendations:', error);
         document.getElementById('loading-spinner').classList.add('d-none');
         document.getElementById('error-message').classList.remove('d-none');
     }
 }
+
+// Make selectedModel globally accessible for api.js
+window.selectedModel = selectedModel;
 
 // Function to compute cosine similarity between two vectors
 function cosineSimilarity(vecA, vecB) {
