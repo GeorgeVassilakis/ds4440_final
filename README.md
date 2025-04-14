@@ -18,7 +18,7 @@ This project creates a music recommendation system by analyzing audio features e
 
 ## Website Usage
 
-Visit the GitHub Pages site at `https://[your-username].github.io/ds4440_final/` to use the music recommender system.
+Visit the GitHub Pages site at `https://georgevassilakis.github.io/ds4440_final/` to use the music recommender system.
 
 1. Enter a song ID (e.g., 286) in the input field
 2. Select the number of recommendations you want to see
