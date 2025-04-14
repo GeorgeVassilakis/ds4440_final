@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Recommender System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header class="bg-dark text-white py-4">
+        <div class="container">
+            <h1 class="text-center">Music Recommender System</h1>
+            <p class="text-center">Find similar songs based on audio features and embeddings</p>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <section class="row mb-5">
+            <div class="col-md-8 offset-md-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="h4 mb-0">Find Similar Songs</h2>
+                    </div>
+                    <div class="card-body">
+                        <form id="recommender-form">
+                            <div class="mb-3">
+                                <label for="song-id" class="form-label">Enter Song ID:</label>
+                                <input type="number" class="form-control" id="song-id" 
+                                       placeholder="Enter a song ID (e.g., 286)" min="1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="num-recommendations" class="form-label">Number of Recommendations:</label>
+                                <select class="form-select" id="num-recommendations">
+                                    <option value="5" selected>5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Get Recommendations</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="results-section" class="row mb-5 d-none">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h2 class="h4 mb-0">Recommended Songs</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="loading-spinner" class="text-center">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-2">Loading recommendations...</p>
+                        </div>
+                        <div id="results-container" class="d-none">
+                            <h3 class="h5 mb-3">Songs similar to ID: <span id="source-song-id"></span></h3>
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Song ID</th>
+                                            <th scope="col">Similarity Score</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="results-table">
+                                        <!-- Results will be inserted here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="error-message" class="alert alert-danger d-none">
+                            Error loading recommendations. Please try another song ID.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row mb-5">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h2 class="h4 mb-0">About This Project</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="h5">How It Works</h3>
+                        <p>This music recommender system uses embeddings generated from audio features to find similar songs. The system was created using the following process:</p>
+                        <ol>
+                            <li>Extracted audio features from songs using a variety of acoustic measures (MFCC, energy, spectral features, etc.)</li>
+                            <li>Trained an autoencoder neural network to generate 16-dimensional embeddings that capture the essence of each song</li>
+                            <li>Computed similarity scores between songs based on the cosine similarity of their embeddings</li>
+                            <li>Created this website to make recommendations based on the pre-computed similarity matrix</li>
+                        </ol>
+                        
+                        <h3 class="h5 mt-4">Technical Details</h3>
+                        <p>The system uses:</p>
+                        <ul>
+                            <li>Audioanalysis features extracted with acoustic processing techniques</li>
+                            <li>Deep learning with PyTorch to create song embeddings</li>
+                            <li>Dimensionality reduction to create a compact song representation</li>
+                            <li>Cosine similarity to measure song similarity</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-3">
+        <div class="container text-center">
+            <p>DS4440 Final Project - Music Recommender System</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html> 
